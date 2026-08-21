@@ -1,0 +1,35 @@
+# Virtual Environment
+medgemma-env/
+venv/
+env/
+
+# Python Cache & Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Models & Large Binary Cache
+models/
+.cache/
+*.bin
+*.safetensors
+*.onnx
+*.gguf
+*.pt
+*.pth
+
+# Audio & Image Outputs
+*.wav
+*.mp3
+*.jpg
+*.jpeg
+*.png
+*.webp
+!med_image.webp
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
