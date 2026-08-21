@@ -44,11 +44,20 @@ class MedicalKioskApp:
         print(" Target Platform: NVIDIA Jetson Orin Nano (8GB)")
         print("=" * 65)
 
-        # Initialize Hardware Sensor Package
-        self.oximeter = OximeterReader(use_hardware=False)
-        self.thermal = ThermalReader(use_hardware=False)
-        self.ecg = ECGReader(buffer_size=500, sample_rate=100)
-        self.camera = CameraModule(camera_index=0)
+        # Initialize Hardware Sensor Package (Strictly Live-Only, No Simulations)
+        try:
+            self.oximeter = OximeterReader(use_hardware=True, i2c_bus=1)
+            self.thermal = ThermalReader(use_hardware=True, i2c_address=0x5A, i2c_bus=1)
+            self.ecg = ECGReader(buffer_size=500, sample_rate=100, i2c_bus=1)
+            self.camera = CameraModule(camera_index=0)
+        except RuntimeError as exc:
+            print("\n" + "!" * 70)
+            print(" MEDICAL KIOSK STARTUP CRASH: HARDWARE DISCONNECTED")
+            print("!" * 70)
+            print(f"Error: {exc}")
+            print("Ensure MAX30102, MLX90614, ADS1115 ADC, and USB/CSI camera are connected.")
+            print("!" * 70 + "\n")
+            sys.exit(1)
 
         # Initialize UI Dashboard
         self.ui = KioskDisplayUI(width=1280, height=720)
