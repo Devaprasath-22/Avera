@@ -2,6 +2,9 @@
 
 An offline, touch-enabled Medical Kiosk application designed for the **NVIDIA Jetson Orin Nano (8GB)**. It features a custom **Retro CRT Terminal / TFT LCD interface**, integrating **local Bhashini ASR/TTS Speech (10 Indian languages)**, **physical healthcare sensors**, **OpenCV camera feeds**, and a **progressive touchscreen diagnostic flow**.
 
+> [!IMPORTANT]
+> **100% LOCAL & OFFLINE RUNTIME**: This entire project operates strictly on the local **NVIDIA Jetson Orin Nano (8GB)** hardware. All sensor register polling, ASR speech recognition, TTS speech synthesis, and Ollama `medgemma:4b` AI diagnosis are processed locally on the device with **no internet access, cloud dependencies, or remote server requests**.
+
 ---
 
 ## 🎨 Retro CRT & TFT Display Aesthetics
