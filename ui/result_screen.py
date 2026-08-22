@@ -22,14 +22,14 @@ class ResultScreen(tk.Frame):
         self.title_label = tk.Label(
             self.header_frame,
             text="ASSESSMENT COMPLETE",
-            font=("Helvetica", 18, "bold"),
+            font=("Consolas", 18, "bold"),
             bg=BG_DARK,
             fg="#00FF66" # Green accent
         )
         self.title_label.pack(pady=15)
 
         # 2. Content Layout (Grid split into Vitals and Transcript/Response)
-        self.content_frame = tk.Frame(self, bg=BG_CARD, bd=1, relief="flat", highlightbackground="#333333", highlightthickness=1)
+        self.content_frame = tk.Frame(self, bg=BG_CARD, bd=3, relief="ridge", highlightbackground="#00FF00", highlightthickness=1)
         self.content_frame.grid(row=1, column=0, sticky="nsew", padx=25, pady=5)
         
         self.content_frame.grid_columnconfigure(0, weight=2) # Vitals (left)
@@ -40,29 +40,29 @@ class ResultScreen(tk.Frame):
         self.vitals_panel = tk.Frame(self.content_frame, bg=BG_CARD)
         self.vitals_panel.grid(row=0, column=0, sticky="nsew", padx=15, pady=15)
         
-        tk.Label(self.vitals_panel, text="Patient Vitals", font=("Helvetica", 12, "bold"), bg=BG_CARD, fg=FG_PRIMARY).pack(anchor="w", pady=(0, 10))
+        tk.Label(self.vitals_panel, text="Patient Vitals", font=("Consolas", 12, "bold"), bg=BG_CARD, fg=FG_PRIMARY).pack(anchor="w", pady=(0, 10))
         
         self.temp_lbl = self._create_vital_row(self.vitals_panel, "🌡 Temperature", "38.2 °C", COLOR_TEMP)
         self.spo2_lbl = self._create_vital_row(self.vitals_panel, "🫁 SpO2", "97 %", COLOR_SPO2)
         self.pulse_lbl = self._create_vital_row(self.vitals_panel, "❤️ Pulse", "82 BPM", COLOR_SPO2)
         self.ecg_lbl = self._create_vital_row(self.vitals_panel, "❤️ ECG", "82 BPM", COLOR_ECG)
         self.doc_lbl = self._create_vital_row(self.vitals_panel, "📄 Document", "Skipped", "#FFFFFF")
-        self.rhythm_lbl = tk.Label(self.vitals_panel, text="Normal Sinus Rhythm", font=("Helvetica", 9, "bold"), bg=BG_CARD, fg=COLOR_ACCENT)
+        self.rhythm_lbl = tk.Label(self.vitals_panel, text="Normal Sinus Rhythm", font=("Consolas", 9, "bold"), bg=BG_CARD, fg=COLOR_ACCENT)
         self.rhythm_lbl.pack(pady=2, anchor="w", padx=25)
         
         # Right Panel - Dialogue log
         self.report_panel = tk.Frame(self.content_frame, bg=BG_CARD)
         self.report_panel.grid(row=0, column=1, sticky="nsew", padx=15, pady=15)
         
-        self.lang_lbl = tk.Label(self.report_panel, text="Language: English", font=("Helvetica", 11, "bold"), bg=BG_CARD, fg=COLOR_ACCENT)
+        self.lang_lbl = tk.Label(self.report_panel, text="Language: English", font=("Consolas", 11, "bold"), bg=BG_CARD, fg=COLOR_ACCENT)
         self.lang_lbl.pack(anchor="w", pady=(0, 5))
         
-        tk.Label(self.report_panel, text="Patient Transcript:", font=("Helvetica", 10, "bold"), bg=BG_CARD, fg=FG_SECONDARY).pack(anchor="w")
+        tk.Label(self.report_panel, text="Patient Transcript:", font=("Consolas", 10, "bold"), bg=BG_CARD, fg=FG_SECONDARY).pack(anchor="w")
         self.patient_box = tk.Label(
             self.report_panel, 
             text="...", 
-            font=("Helvetica", 11, "italic"), 
-            bg="#252525", 
+            font=("Consolas", 11, "italic"), 
+            bg="#0A140A", 
             fg=FG_PRIMARY,
             wraplength=230,
             justify="left",
@@ -74,12 +74,12 @@ class ResultScreen(tk.Frame):
         )
         self.patient_box.pack(fill="x", pady=(2, 8))
         
-        tk.Label(self.report_panel, text="Assistant Recommendation:", font=("Helvetica", 10, "bold"), bg=BG_CARD, fg=FG_SECONDARY).pack(anchor="w")
+        tk.Label(self.report_panel, text="Assistant Recommendation:", font=("Consolas", 10, "bold"), bg=BG_CARD, fg=FG_SECONDARY).pack(anchor="w")
         self.assistant_box = tk.Label(
             self.report_panel, 
             text="...", 
-            font=("Helvetica", 11), 
-            bg="#252525", 
+            font=("Consolas", 11), 
+            bg="#0A140A", 
             fg=COLOR_ACCENT,
             wraplength=230,
             justify="left",
@@ -102,12 +102,12 @@ class ResultScreen(tk.Frame):
         self.play_btn = tk.Button(
             self.footer_frame, 
             text="🔊 PLAY RESPONSE", 
-            font=("Helvetica", 11, "bold"), 
+            font=("Consolas", 11, "bold"), 
             bg="#333333", 
             fg=FG_PRIMARY, 
             activebackground="#444444",
             activeforeground=FG_PRIMARY,
-            bd=0, 
+            bd=1, relief="solid", 
             padx=15, 
             pady=10, 
             cursor="hand2",
@@ -118,12 +118,12 @@ class ResultScreen(tk.Frame):
         self.print_btn = tk.Button(
             self.footer_frame, 
             text="🖨️ PRINT", 
-            font=("Helvetica", 11, "bold"), 
+            font=("Consolas", 11, "bold"), 
             bg="#007AFF", 
             fg="#FFFFFF", 
             activebackground="#005BBB",
             activeforeground="#FFFFFF",
-            bd=0, 
+            bd=1, relief="solid", 
             padx=15, 
             pady=10, 
             cursor="hand2",
@@ -134,12 +134,12 @@ class ResultScreen(tk.Frame):
         self.reset_btn = tk.Button(
             self.footer_frame, 
             text="NEW ASSESSMENT", 
-            font=("Helvetica", 11, "bold"), 
+            font=("Consolas", 11, "bold"), 
             bg=COLOR_ACCENT, 
             fg="#000000", 
             activebackground="#00B0D0",
             activeforeground="#000000",
-            bd=0, 
+            bd=1, relief="solid", 
             padx=15, 
             pady=10, 
             cursor="hand2",
@@ -151,8 +151,8 @@ class ResultScreen(tk.Frame):
         row = tk.Frame(parent, bg=BG_CARD)
         row.pack(fill="x", pady=4)
         
-        tk.Label(row, text=label_text, font=("Helvetica", 11), bg=BG_CARD, fg=FG_SECONDARY).pack(side="left")
-        lbl = tk.Label(row, text=val_text, font=("Helvetica", 13, "bold"), bg=BG_CARD, fg=color)
+        tk.Label(row, text=label_text, font=("Consolas", 11), bg=BG_CARD, fg=FG_SECONDARY).pack(side="left")
+        lbl = tk.Label(row, text=val_text, font=("Consolas", 13, "bold"), bg=BG_CARD, fg=color)
         lbl.pack(side="right", padx=10)
         return lbl
 

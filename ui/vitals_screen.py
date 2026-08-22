@@ -24,14 +24,14 @@ class VitalsScreen(tk.Frame):
         self.title_label = tk.Label(
             self.header_frame,
             text="SYSTEM INITIALIZATION",
-            font=("Helvetica", 18, "bold"),
+            font=("Consolas", 18, "bold"),
             bg=BG_DARK,
             fg=COLOR_ACCENT
         )
         self.title_label.pack(pady=15)
 
         # 2. Main Content Card
-        self.content_frame = tk.Frame(self, bg=BG_CARD, bd=1, relief="flat", highlightbackground="#333333", highlightthickness=1)
+        self.content_frame = tk.Frame(self, bg=BG_CARD, bd=3, relief="ridge", highlightbackground="#00FF00", highlightthickness=1)
         self.content_frame.grid(row=1, column=0, sticky="nsew", padx=30, pady=10)
         
         # Configure grid for content frame
@@ -47,7 +47,7 @@ class VitalsScreen(tk.Frame):
         self.status_label = tk.Label(
             self.footer_frame,
             text="Preparing assessment...",
-            font=("Helvetica", 12, "italic"),
+            font=("Consolas", 12, "italic"),
             bg=BG_DARK,
             fg=FG_SECONDARY
         )
@@ -56,12 +56,12 @@ class VitalsScreen(tk.Frame):
         self.action_btn = tk.Button(
             self.footer_frame,
             text="CONTINUE",
-            font=("Helvetica", 12, "bold"),
+            font=("Consolas", 12, "bold"),
             bg=COLOR_ACCENT,
             fg="#000000",
             activebackground="#00B0D0",
             activeforeground="#000000",
-            bd=0,
+            bd=1, relief="solid",
             padx=20,
             pady=8,
             cursor="hand2",
@@ -101,7 +101,7 @@ class VitalsScreen(tk.Frame):
             lbl = tk.Label(
                 init_frame, 
                 text=f"{symbol} {name}", 
-                font=("Helvetica", 13), 
+                font=("Consolas", 13), 
                 bg=BG_CARD, 
                 fg=color,
                 anchor="w"
@@ -126,13 +126,13 @@ class VitalsScreen(tk.Frame):
         frame.grid(row=0, column=0, sticky="nsew", padx=20, pady=20)
         frame.grid_columnconfigure(0, weight=1)
         
-        icon_lbl = tk.Label(frame, text="🌡", font=("Helvetica", 48), bg=BG_CARD, fg=COLOR_TEMP)
+        icon_lbl = tk.Label(frame, text="🌡", font=("Consolas", 48), bg=BG_CARD, fg=COLOR_TEMP)
         icon_lbl.pack(pady=10)
         
         desc_lbl = tk.Label(
             frame, 
             text="Place the sensor near to forehead", 
-            font=("Helvetica", 14, "bold"), 
+            font=("Consolas", 14, "bold"), 
             bg=BG_CARD, 
             fg=COLOR_WARNING
         )
@@ -141,12 +141,12 @@ class VitalsScreen(tk.Frame):
         check_btn = tk.Button(
             frame,
             text="CHECK",
-            font=("Helvetica", 13, "bold"),
+            font=("Consolas", 13, "bold"),
             bg=COLOR_TEMP,
             fg="#000000",
             activebackground="#D07000",
             activeforeground="#000000",
-            bd=0,
+            bd=1, relief="solid",
             padx=30,
             pady=10,
             cursor="hand2",
@@ -160,10 +160,10 @@ class VitalsScreen(tk.Frame):
         frame.grid(row=0, column=0, sticky="nsew", padx=20, pady=20)
         frame.grid_columnconfigure(0, weight=1)
         
-        icon_lbl = tk.Label(frame, text="🌡", font=("Helvetica", 48), bg=BG_CARD, fg=COLOR_TEMP)
+        icon_lbl = tk.Label(frame, text="🌡", font=("Consolas", 48), bg=BG_CARD, fg=COLOR_TEMP)
         icon_lbl.pack(pady=10)
         
-        desc_lbl = tk.Label(frame, text="Analyzing temperature...", font=("Helvetica", 13), bg=BG_CARD, fg=FG_PRIMARY)
+        desc_lbl = tk.Label(frame, text="Analyzing temperature...", font=("Consolas", 13), bg=BG_CARD, fg=FG_PRIMARY)
         desc_lbl.pack(pady=5)
         
         bar_len = 15
@@ -187,21 +187,21 @@ class VitalsScreen(tk.Frame):
         frame.grid(row=0, column=0, sticky="nsew", padx=20, pady=20)
         frame.grid_columnconfigure(0, weight=1)
         
-        icon_lbl = tk.Label(frame, text="✓ Temperature complete", font=("Helvetica", 13, "bold"), bg=BG_CARD, fg="#00FF66")
+        icon_lbl = tk.Label(frame, text="✓ Temperature complete", font=("Consolas", 13, "bold"), bg=BG_CARD, fg="#00FF66")
         icon_lbl.pack(pady=10)
         
-        val_lbl = tk.Label(frame, text=f"{temp_val} °C", font=("Helvetica", 36, "bold"), bg=BG_CARD, fg=COLOR_TEMP)
+        val_lbl = tk.Label(frame, text=f"{temp_val} °C", font=("Consolas", 36, "bold"), bg=BG_CARD, fg=COLOR_TEMP)
         val_lbl.pack(pady=10)
         
         next_btn = tk.Button(
             frame,
             text="NEXT",
-            font=("Helvetica", 13, "bold"),
+            font=("Consolas", 13, "bold"),
             bg=COLOR_TEMP,
             fg="#000000",
             activebackground="#D07000",
             activeforeground="#000000",
-            bd=0,
+            bd=1, relief="solid",
             padx=35,
             pady=10,
             cursor="hand2",
@@ -221,13 +221,13 @@ class VitalsScreen(tk.Frame):
         frame.grid(row=0, column=0, sticky="nsew", padx=20, pady=20)
         frame.grid_columnconfigure(0, weight=1)
         
-        icon_lbl = tk.Label(frame, text="🫁", font=("Helvetica", 48), bg=BG_CARD, fg=COLOR_SPO2)
+        icon_lbl = tk.Label(frame, text="🫁", font=("Consolas", 48), bg=BG_CARD, fg=COLOR_SPO2)
         icon_lbl.pack(pady=5)
         
         desc_lbl = tk.Label(
             frame, 
             text="Place finger on the oximeter sensor", 
-            font=("Helvetica", 14, "bold"), 
+            font=("Consolas", 14, "bold"), 
             bg=BG_CARD, 
             fg=COLOR_WARNING
         )
@@ -236,12 +236,12 @@ class VitalsScreen(tk.Frame):
         check_btn = tk.Button(
             frame,
             text="CHECK",
-            font=("Helvetica", 13, "bold"),
+            font=("Consolas", 13, "bold"),
             bg=COLOR_SPO2,
             fg="#000000",
             activebackground="#00B050",
             activeforeground="#000000",
-            bd=0,
+            bd=1, relief="solid",
             padx=30,
             pady=10,
             cursor="hand2",
@@ -255,10 +255,10 @@ class VitalsScreen(tk.Frame):
         frame.grid(row=0, column=0, sticky="nsew", padx=20, pady=20)
         frame.grid_columnconfigure(0, weight=1)
         
-        icon_lbl = tk.Label(frame, text="🫁", font=("Helvetica", 48), bg=BG_CARD, fg=COLOR_SPO2)
+        icon_lbl = tk.Label(frame, text="🫁", font=("Consolas", 48), bg=BG_CARD, fg=COLOR_SPO2)
         icon_lbl.pack(pady=5)
         
-        desc_lbl = tk.Label(frame, text="Analyzing SpO2 & Pulse...", font=("Helvetica", 13), bg=BG_CARD, fg=FG_PRIMARY)
+        desc_lbl = tk.Label(frame, text="Analyzing SpO2 & Pulse...", font=("Consolas", 13), bg=BG_CARD, fg=FG_PRIMARY)
         desc_lbl.pack(pady=5)
         
         bar_len = 15
@@ -283,27 +283,27 @@ class VitalsScreen(tk.Frame):
         frame.grid(row=0, column=0, sticky="nsew", padx=20, pady=15)
         frame.grid_columnconfigure(0, weight=1)
         
-        desc_lbl = tk.Label(frame, text="✓ SpO2 Complete", font=("Helvetica", 13, "bold"), bg=BG_CARD, fg="#00FF66")
+        desc_lbl = tk.Label(frame, text="✓ SpO2 Complete", font=("Consolas", 13, "bold"), bg=BG_CARD, fg="#00FF66")
         desc_lbl.pack(pady=5)
         
         results_frame = tk.Frame(frame, bg=BG_CARD)
         results_frame.pack(pady=10)
         
-        spo2_lbl = tk.Label(results_frame, text=f"SpO2: {spo2_val} %", font=("Helvetica", 20, "bold"), bg=BG_CARD, fg=COLOR_SPO2)
+        spo2_lbl = tk.Label(results_frame, text=f"SpO2: {spo2_val} %", font=("Consolas", 20, "bold"), bg=BG_CARD, fg=COLOR_SPO2)
         spo2_lbl.grid(row=0, column=0, padx=20)
         
-        pulse_lbl = tk.Label(results_frame, text=f"Pulse: {pulse_val} BPM", font=("Helvetica", 20, "bold"), bg=BG_CARD, fg=COLOR_SPO2)
+        pulse_lbl = tk.Label(results_frame, text=f"Pulse: {pulse_val} BPM", font=("Consolas", 20, "bold"), bg=BG_CARD, fg=COLOR_SPO2)
         pulse_lbl.grid(row=0, column=1, padx=20)
         
         next_btn = tk.Button(
             frame,
             text="NEXT",
-            font=("Helvetica", 13, "bold"),
+            font=("Consolas", 13, "bold"),
             bg=COLOR_SPO2,
             fg="#000000",
             activebackground="#00B050",
             activeforeground="#000000",
-            bd=0,
+            bd=1, relief="solid",
             padx=35,
             pady=10,
             cursor="hand2",
@@ -326,7 +326,7 @@ class VitalsScreen(tk.Frame):
         desc_lbl = tk.Label(
             frame, 
             text="Place ECG electrodes correctly as shown below", 
-            font=("Helvetica", 12, "bold"), 
+            font=("Consolas", 12, "bold"), 
             bg=BG_CARD, 
             fg=COLOR_WARNING
         )
@@ -340,7 +340,7 @@ class VitalsScreen(tk.Frame):
             width=canvas_width,
             height=canvas_height,
             bg="#171717",
-            bd=0,
+            bd=1, relief="solid",
             highlightthickness=1,
             highlightbackground="#333333"
         )
@@ -371,20 +371,20 @@ class VitalsScreen(tk.Frame):
         guide_canvas.create_oval(220, 125, 230, 135, fill="#00E676", outline="#FFFFFF", width=1)
         
         # Right Side Legends
-        guide_canvas.create_text(20, 25, text="🔴 RED Wire: Right Wrist", fill="#FF1744", font=("Helvetica", 9, "bold"), anchor="w")
-        guide_canvas.create_text(20, 55, text="🟡 YELLOW Wire: Left Wrist", fill="#FFEA00", font=("Helvetica", 9, "bold"), anchor="w")
-        guide_canvas.create_text(20, 85, text="🟢 GREEN Wire: Left Ankle", fill="#00E676", font=("Helvetica", 9, "bold"), anchor="w")
+        guide_canvas.create_text(20, 25, text="🔴 RED Wire: Right Wrist", fill="#FF1744", font=("Consolas", 9, "bold"), anchor="w")
+        guide_canvas.create_text(20, 55, text="🟡 YELLOW Wire: Left Wrist", fill="#FFEA00", font=("Consolas", 9, "bold"), anchor="w")
+        guide_canvas.create_text(20, 85, text="🟢 GREEN Wire: Left Ankle", fill="#00E676", font=("Consolas", 9, "bold"), anchor="w")
         
         # Action check button
         check_btn = tk.Button(
             frame,
             text="CHECK",
-            font=("Helvetica", 12, "bold"),
+            font=("Consolas", 12, "bold"),
             bg=COLOR_ECG,
             fg="#FFFFFF",
             activebackground="#B01030",
             activeforeground="#FFFFFF",
-            bd=0,
+            bd=1, relief="solid",
             padx=35,
             pady=8,
             cursor="hand2",
@@ -401,10 +401,10 @@ class VitalsScreen(tk.Frame):
         header_row = tk.Frame(self.ecg_frame, bg=BG_CARD)
         header_row.pack(fill="x", pady=5)
         
-        icon_lbl = tk.Label(header_row, text="❤️", font=("Helvetica", 20), bg=BG_CARD, fg=COLOR_ECG)
+        icon_lbl = tk.Label(header_row, text="❤️", font=("Consolas", 20), bg=BG_CARD, fg=COLOR_ECG)
         icon_lbl.pack(side="left", padx=10)
         
-        desc_lbl = tk.Label(header_row, text="Analyzing ECG signal...", font=("Helvetica", 13), bg=BG_CARD, fg=FG_PRIMARY)
+        desc_lbl = tk.Label(header_row, text="Analyzing ECG signal...", font=("Consolas", 13), bg=BG_CARD, fg=FG_PRIMARY)
         desc_lbl.pack(side="left")
         
         self.canvas_width = 440
@@ -414,16 +414,16 @@ class VitalsScreen(tk.Frame):
             width=self.canvas_width,
             height=self.canvas_height,
             bg="#000000",
-            bd=0,
+            bd=1, relief="solid",
             highlightthickness=1,
             highlightbackground="#444444"
         )
         self.canvas.pack(pady=10, fill="both", expand=True)
         
         for x in range(0, self.canvas_width, 25):
-            self.canvas.create_line(x, 0, x, self.canvas_height, fill="#221111")
+            self.canvas.create_line(x, 0, x, self.canvas_height, fill="#0D220D")
         for y in range(0, self.canvas_height, 25):
-            self.canvas.create_line(0, y, self.canvas_width, y, fill="#221111")
+            self.canvas.create_line(0, y, self.canvas_width, y, fill="#0D220D")
             
         self.status_label.config(text="Recording chest signals...")
 
@@ -435,27 +435,27 @@ class VitalsScreen(tk.Frame):
         frame.grid(row=0, column=0, sticky="nsew", padx=20, pady=10)
         frame.grid_columnconfigure(0, weight=1)
         
-        desc_lbl = tk.Label(frame, text="✓ ECG Complete", font=("Helvetica", 13, "bold"), bg=BG_CARD, fg="#00FF66")
+        desc_lbl = tk.Label(frame, text="✓ ECG Complete", font=("Consolas", 13, "bold"), bg=BG_CARD, fg="#00FF66")
         desc_lbl.pack(pady=5)
         
         results_frame = tk.Frame(frame, bg=BG_CARD)
         results_frame.pack(pady=10)
         
-        hr_lbl = tk.Label(results_frame, text=f"Heart Rate: {heart_rate} BPM", font=("Helvetica", 18, "bold"), bg=BG_CARD, fg=COLOR_ECG)
+        hr_lbl = tk.Label(results_frame, text=f"Heart Rate: {heart_rate} BPM", font=("Consolas", 18, "bold"), bg=BG_CARD, fg=COLOR_ECG)
         hr_lbl.grid(row=0, column=0, padx=20)
         
-        rhythm_lbl = tk.Label(results_frame, text=f"Rhythm: {rhythm}", font=("Helvetica", 14, "bold"), bg=BG_CARD, fg=COLOR_ACCENT)
+        rhythm_lbl = tk.Label(results_frame, text=f"Rhythm: {rhythm}", font=("Consolas", 14, "bold"), bg=BG_CARD, fg=COLOR_ACCENT)
         rhythm_lbl.grid(row=0, column=1, padx=20)
         
         next_btn = tk.Button(
             frame,
             text="NEXT",
-            font=("Helvetica", 13, "bold"),
+            font=("Consolas", 13, "bold"),
             bg=COLOR_ECG,
             fg="#FFFFFF",
             activebackground="#B01030",
             activeforeground="#FFFFFF",
-            bd=0,
+            bd=1, relief="solid",
             padx=35,
             pady=10,
             cursor="hand2",
@@ -509,26 +509,26 @@ class VitalsScreen(tk.Frame):
         grid_frame.grid_rowconfigure(0, weight=1)
         grid_frame.grid_rowconfigure(1, weight=1)
         
-        card_t = tk.Frame(grid_frame, bg="#2A2A2A", bd=1, relief="flat", padx=15, pady=10)
+        card_t = tk.Frame(grid_frame, bg="#152215", bd=1, relief="solid", padx=15, pady=10)
         card_t.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
-        tk.Label(card_t, text="🌡 Temperature", font=("Helvetica", 12), bg="#2A2A2A", fg=FG_SECONDARY).pack(anchor="w")
-        tk.Label(card_t, text=f"{temp} °C", font=("Helvetica", 20, "bold"), bg="#2A2A2A", fg=COLOR_TEMP).pack(pady=5, anchor="center")
+        tk.Label(card_t, text="🌡 Temperature", font=("Consolas", 12), bg="#152215", fg=FG_SECONDARY).pack(anchor="w")
+        tk.Label(card_t, text=f"{temp} °C", font=("Consolas", 20, "bold"), bg="#152215", fg=COLOR_TEMP).pack(pady=5, anchor="center")
         
-        card_o = tk.Frame(grid_frame, bg="#2A2A2A", bd=1, relief="flat", padx=15, pady=10)
+        card_o = tk.Frame(grid_frame, bg="#152215", bd=1, relief="solid", padx=15, pady=10)
         card_o.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
-        tk.Label(card_o, text="🫁 SpO2", font=("Helvetica", 12), bg="#2A2A2A", fg=FG_SECONDARY).pack(anchor="w")
-        tk.Label(card_o, text=f"{spo2} %", font=("Helvetica", 20, "bold"), bg="#2A2A2A", fg=COLOR_SPO2).pack(pady=5, anchor="center")
+        tk.Label(card_o, text="🫁 SpO2", font=("Consolas", 12), bg="#152215", fg=FG_SECONDARY).pack(anchor="w")
+        tk.Label(card_o, text=f"{spo2} %", font=("Consolas", 20, "bold"), bg="#152215", fg=COLOR_SPO2).pack(pady=5, anchor="center")
         
-        card_p = tk.Frame(grid_frame, bg="#2A2A2A", bd=1, relief="flat", padx=15, pady=10)
+        card_p = tk.Frame(grid_frame, bg="#152215", bd=1, relief="solid", padx=15, pady=10)
         card_p.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
-        tk.Label(card_p, text="❤️ Pulse", font=("Helvetica", 12), bg="#2A2A2A", fg=FG_SECONDARY).pack(anchor="w")
-        tk.Label(card_p, text=f"{pulse} BPM", font=("Helvetica", 20, "bold"), bg="#2A2A2A", fg=COLOR_SPO2).pack(pady=5, anchor="center")
+        tk.Label(card_p, text="❤️ Pulse", font=("Consolas", 12), bg="#152215", fg=FG_SECONDARY).pack(anchor="w")
+        tk.Label(card_p, text=f"{pulse} BPM", font=("Consolas", 20, "bold"), bg="#152215", fg=COLOR_SPO2).pack(pady=5, anchor="center")
         
-        card_e = tk.Frame(grid_frame, bg="#2A2A2A", bd=1, relief="flat", padx=15, pady=10)
+        card_e = tk.Frame(grid_frame, bg="#152215", bd=1, relief="solid", padx=15, pady=10)
         card_e.grid(row=1, column=1, padx=10, pady=10, sticky="nsew")
-        tk.Label(card_e, text="❤️ ECG Rhythm", font=("Helvetica", 12), bg="#2A2A2A", fg=FG_SECONDARY).pack(anchor="w")
-        tk.Label(card_e, text=f"{pulse} BPM", font=("Helvetica", 20, "bold"), bg="#2A2A2A", fg=COLOR_ECG).pack(pady=5, anchor="center")
-        tk.Label(card_e, text=rhythm, font=("Helvetica", 10, "bold"), bg="#2A2A2A", fg=COLOR_ACCENT).pack(anchor="center")
+        tk.Label(card_e, text="❤️ ECG Rhythm", font=("Consolas", 12), bg="#152215", fg=FG_SECONDARY).pack(anchor="w")
+        tk.Label(card_e, text=f"{pulse} BPM", font=("Consolas", 20, "bold"), bg="#152215", fg=COLOR_ECG).pack(pady=5, anchor="center")
+        tk.Label(card_e, text=rhythm, font=("Consolas", 10, "bold"), bg="#152215", fg=COLOR_ACCENT).pack(anchor="center")
 
     def on_continue_clicked(self):
         self.controller.advance_from_vitals_summary()

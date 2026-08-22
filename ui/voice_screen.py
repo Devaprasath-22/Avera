@@ -31,14 +31,14 @@ class VoiceScreen(tk.Frame):
         self.title_label = tk.Label(
             self.header_frame,
             text="CLINICAL AUDIO RESPONSE",
-            font=("Helvetica", 18, "bold"),
+            font=("Consolas", 18, "bold"),
             bg=BG_DARK,
             fg=COLOR_ACCENT
         )
         self.title_label.pack(pady=15)
 
         # 2. Main Content Card
-        self.content_frame = tk.Frame(self, bg=BG_CARD, bd=1, relief="flat", highlightbackground="#333333", highlightthickness=1)
+        self.content_frame = tk.Frame(self, bg=BG_CARD, bd=3, relief="ridge", highlightbackground="#00FF00", highlightthickness=1)
         self.content_frame.grid(row=1, column=0, sticky="nsew", padx=30, pady=10)
         
         self.content_frame.grid_columnconfigure(0, weight=1)
@@ -50,14 +50,14 @@ class VoiceScreen(tk.Frame):
         
         # Mic pulsing indicator
         self.mic_badge = tk.Frame(self.card_inner, bg="#FF1744", padx=15, pady=8)
-        self.mic_label = tk.Label(self.mic_badge, text="🎙 RECORDING SPEECH", font=("Helvetica", 12, "bold"), bg="#FF1744", fg="#FFFFFF")
+        self.mic_label = tk.Label(self.mic_badge, text="🎙 RECORDING SPEECH", font=("Consolas", 12, "bold"), bg="#FF1744", fg="#FFFFFF")
         self.mic_label.pack()
         
         # Large Illness Prompt
         self.prompt_label = tk.Label(
             self.card_inner, 
             text="Tell your illness", 
-            font=("Helvetica", 16, "bold"), 
+            font=("Consolas", 16, "bold"), 
             bg=BG_CARD, 
             fg=FG_PRIMARY,
             wraplength=380,
@@ -69,7 +69,7 @@ class VoiceScreen(tk.Frame):
         self.countdown_label = tk.Label(
             self.card_inner, 
             text="7", 
-            font=("Helvetica", 32, "bold"), 
+            font=("Consolas", 32, "bold"), 
             bg=BG_CARD, 
             fg=COLOR_WARNING
         )
@@ -82,7 +82,7 @@ class VoiceScreen(tk.Frame):
         self.status_label = tk.Label(
             self.footer_frame,
             text="Initializing dialog...",
-            font=("Helvetica", 12, "italic"),
+            font=("Consolas", 12, "italic"),
             bg=BG_DARK,
             fg=FG_SECONDARY
         )
@@ -99,7 +99,7 @@ class VoiceScreen(tk.Frame):
         self.prompt_label.pack_forget()
         self.countdown_label.pack_forget()
         
-        self.loading_lbl = tk.Label(self.card_inner, text="Initializing audio output...", font=("Helvetica", 13), bg=BG_CARD, fg=FG_SECONDARY)
+        self.loading_lbl = tk.Label(self.card_inner, text="Initializing audio output...", font=("Consolas", 13), bg=BG_CARD, fg=FG_SECONDARY)
         self.loading_lbl.pack(pady=40)
 
     def show_listening(self, lang_code):

@@ -27,19 +27,19 @@ class CameraScreen(tk.Frame):
         self.title_label = tk.Label(
             self.header_frame,
             text="SKIN ISSUE CAPTURE",
-            font=("Helvetica", 16, "bold"),
+            font=("Consolas", 16, "bold"),
             bg=BG_DARK,
             fg=COLOR_ACCENT
         )
         self.title_label.pack(pady=10)
         
         # 2. Camera Viewfinder
-        self.content_frame = tk.Frame(self, bg=BG_CARD, bd=1, relief="flat", highlightbackground="#333333", highlightthickness=1)
+        self.content_frame = tk.Frame(self, bg=BG_CARD, bd=3, relief="ridge", highlightbackground="#00FF00", highlightthickness=1)
         self.content_frame.grid(row=1, column=0, sticky="nsew", padx=30, pady=5)
         self.content_frame.grid_rowconfigure(0, weight=1)
         self.content_frame.grid_columnconfigure(0, weight=1)
         
-        self.camera_box = tk.Frame(self.content_frame, bg="#111111")
+        self.camera_box = tk.Frame(self.content_frame, bg="#081008")
         self.camera_box.grid(row=0, column=0, sticky="nsew", padx=15, pady=15)
         self.camera_box.grid_rowconfigure(0, weight=1)
         self.camera_box.grid_columnconfigure(0, weight=1)
@@ -47,8 +47,8 @@ class CameraScreen(tk.Frame):
         self.viewfinder_label = tk.Label(
             self.camera_box,
             text="[ Camera Feed Loading... ]",
-            font=("Helvetica", 12, "italic"),
-            bg="#111111",
+            font=("Consolas", 12, "italic"),
+            bg="#081008",
             fg="#777777"
         )
         self.viewfinder_label.grid(row=0, column=0)
@@ -56,8 +56,8 @@ class CameraScreen(tk.Frame):
         self.overlay_label = tk.Label(
             self.camera_box,
             text="",
-            font=("Helvetica", 14, "bold"),
-            bg="#111111",
+            font=("Consolas", 14, "bold"),
+            bg="#081008",
             fg="#00E676"
         )
         # We will pack this over the viewfinder when analyzing
@@ -76,12 +76,12 @@ class CameraScreen(tk.Frame):
             self.buttons_frame, 
 
             text="📷 CAPTURE", 
-            font=("Helvetica", 12, "bold"), 
+            font=("Consolas", 12, "bold"), 
             bg="#FF1744", 
             fg="#FFFFFF", 
             activebackground="#D50000",
             activeforeground="#FFFFFF",
-            bd=0, 
+            bd=1, relief="solid", 
             padx=20, 
             pady=10, 
             cursor="hand2",
@@ -92,12 +92,12 @@ class CameraScreen(tk.Frame):
         self.skip_btn = tk.Button(
             self.buttons_frame, 
             text="⏭ SKIP", 
-            font=("Helvetica", 12, "bold"), 
+            font=("Consolas", 12, "bold"), 
             bg="#555555", 
             fg="#FFFFFF", 
             activebackground="#777777",
             activeforeground="#FFFFFF",
-            bd=0, 
+            bd=1, relief="solid", 
             padx=20, 
             pady=10, 
             cursor="hand2",
