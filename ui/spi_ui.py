@@ -12,18 +12,27 @@ except ImportError:
     SPI_AVAILABLE = False
     print("WARNING: SPI libraries not found. Running in simulation mode.")
 
+# Retro CRT Theme Color RGB tuples
+RETRO_BG = (5, 8, 5)          # Deep CRT monitor black-green
+RETRO_CARD = (13, 20, 13)     # Dark green console card
+RETRO_GREEN = (51, 255, 51)   # Phosphor green
+RETRO_AMBER = (255, 176, 0)   # Terminal Amber
+RETRO_RED = (255, 51, 51)     # Red warning trace
+RETRO_DIM = (0, 170, 0)       # Dim green
+
 class SpiUI:
     def __init__(self):
         self.width = 320
         self.height = 240
-        self.image = Image.new("RGB", (self.width, self.height), color=(255, 255, 255))
+        # Initialize canvas with Retro CRT Background
+        self.image = Image.new("RGB", (self.width, self.height), color=RETRO_BG)
         self.draw = ImageDraw.Draw(self.image)
         self.disp = None
         
         try:
-            self.font_large = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 24)
-            self.font_medium = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 18)
-            self.font_small = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 14)
+            self.font_large = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 20)
+            self.font_medium = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 15)
+            self.font_small = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 12)
         except:
             self.font_large = ImageFont.load_default()
             self.font_medium = ImageFont.load_default()
@@ -42,7 +51,6 @@ class SpiUI:
                 # Configuration for CS and DC pins
                 cs_pin = digitalio.DigitalInOut(board.D8)    # Pin 24
                 dc_pin = digitalio.DigitalInOut(board.D6)    # MOVED to Pin 31 to avoid driver conflicts
-                # reset_pin is removed; user will tie it to 3.3V
 
                 # Create SOFTWARE SPI bus using Bit-Banging (Bypasses any kernel SPI issues)
                 import adafruit_bitbangio as bitbangio
@@ -56,7 +64,7 @@ class SpiUI:
                     dc=dc_pin,
                     baudrate=5000000,
                 )
-                print("SPI Display Initialized Successfully!")
+                print("SPI Display Initialized Successfully in Retro CRT Mode!")
             except Exception as e:
                 print(f"Error initializing SPI display: {e}")
                 self.disp = None
@@ -66,52 +74,60 @@ class SpiUI:
         if self.disp:
             self.disp.image(self.image)
         else:
-            # If testing on Windows, just save to a file or print
+            # If testing on Windows, save simulated image locally
             self.image.save("simulated_screen.png")
 
-    def clear(self, color=(255, 255, 255)):
+    def clear(self, color=RETRO_BG):
         self.draw.rectangle((0, 0, self.width, self.height), fill=color)
 
-    def draw_text_centered(self, text, y, font, color=(0, 0, 0)):
+    def draw_text_centered(self, text, y, font, color=RETRO_GREEN):
         # Calculate text bounding box
         bbox = self.draw.textbbox((0, 0), text, font=font)
         text_w = bbox[2] - bbox[0]
         x = (self.width - text_w) // 2
         self.draw.text((x, y), text, font=font, fill=color)
 
-    def show_message(self, title, subtitle="", bg_color=(255, 255, 255), fg_color=(0,0,0)):
+    def show_message(self, title, subtitle="", bg_color=RETRO_BG, fg_color=RETRO_GREEN):
         self.clear(bg_color)
-        self.draw_text_centered(title, 80, self.font_large, color=fg_color)
+        
+        # Retro bordered frame outline
+        self.draw.rectangle((4, 4, self.width - 4, self.height - 4), outline=RETRO_GREEN, width=2)
+        
+        self.draw_text_centered(title, 70, self.font_large, color=fg_color)
         if subtitle:
-            self.draw_text_centered(subtitle, 120, self.font_medium, color=fg_color)
+            self.draw_text_centered(subtitle, 110, self.font_medium, color=RETRO_AMBER)
         self.render()
 
-    def show_progress(self, title, percentage, color=(0, 200, 0)):
-        self.clear((255, 255, 255))
-        self.draw_text_centered(title, 60, self.font_large, color=(0, 0, 0))
+    def show_progress(self, title, percentage, color=RETRO_GREEN):
+        self.clear(RETRO_BG)
+        self.draw.rectangle((4, 4, self.width - 4, self.height - 4), outline=RETRO_GREEN, width=2)
+        
+        self.draw_text_centered(title, 50, self.font_large, color=RETRO_AMBER)
         
         # Draw progress bar container
         bar_x = 40
-        bar_y = 120
+        bar_y = 110
         bar_w = 240
-        bar_h = 30
-        self.draw.rectangle((bar_x, bar_y, bar_x + bar_w, bar_y + bar_h), outline=(0, 0, 0), width=2)
+        bar_h = 24
+        self.draw.rectangle((bar_x, bar_y, bar_x + bar_w, bar_y + bar_h), outline=RETRO_GREEN, width=2)
         
-        # Fill progress
+        # Fill progress with solid ticks
         fill_w = int((percentage / 100.0) * (bar_w - 4))
         if fill_w > 0:
             self.draw.rectangle((bar_x + 2, bar_y + 2, bar_x + 2 + fill_w, bar_y + bar_h - 2), fill=color)
             
-        self.draw_text_centered(f"{percentage}%", 160, self.font_medium, color=(0,0,0))
+        self.draw_text_centered(f"STATUS: {percentage}%", 150, self.font_medium, color=RETRO_GREEN)
         self.render()
 
     def show_results(self, temp, spo2, pulse):
-        self.clear((255, 255, 255))
-        self.draw_text_centered("VITALS SUMMARY", 20, self.font_large, color=(0, 0, 0))
+        self.clear(RETRO_BG)
+        self.draw.rectangle((4, 4, self.width - 4, self.height - 4), outline=RETRO_GREEN, width=2)
         
-        self.draw.text((30, 70), f"Temp: {temp:.1f} °F", font=self.font_medium, fill=(255, 100, 0))
-        self.draw.text((30, 110), f"SpO2: {spo2} %", font=self.font_medium, fill=(0, 150, 0))
-        self.draw.text((30, 150), f"Pulse: {pulse} BPM", font=self.font_medium, fill=(200, 0, 0))
+        self.draw_text_centered("VITALS SUMMARY REPORT", 15, self.font_large, color=RETRO_GREEN)
         
-        self.draw_text_centered("Reading Complete...", 200, self.font_small, color=(100, 100, 100))
+        self.draw.text((30, 65), f"Temp:  {temp:.1f} °C", font=self.font_medium, fill=RETRO_AMBER)
+        self.draw.text((30, 105), f"SpO2:  {spo2} %", font=self.font_medium, fill=RETRO_GREEN)
+        self.draw.text((30, 145), f"Pulse: {pulse} BPM", font=self.font_medium, fill=RETRO_RED)
+        
+        self.draw_text_centered(">>> TELEMETRY PUSHED <<<", 195, self.font_small, color=RETRO_DIM)
         self.render()
