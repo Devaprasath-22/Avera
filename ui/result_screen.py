@@ -208,7 +208,7 @@ class ResultScreen(tk.Frame):
         self.temp_lbl.config(text=report["temp"])
         self.spo2_lbl.config(text=report["spo2"])
         self.pulse_lbl.config(text=report["pulse"])
-        self.ecg_lbl.config(text=report["pulse"] + " BPM")
+        self.ecg_lbl.config(text=report["pulse"])
         
         self.rhythm_lbl.config(text="Normal Sinus Rhythm")
         self.lang_lbl.config(text=f"Language: {report['lang_name']} ({report['native_name']})")

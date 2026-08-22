@@ -23,6 +23,7 @@ from utils.logger import setup_logger
 
 # MedGemma imports
 try:
+    import ollama
     from bhashini_speech import (
         BhashiniLocalASR,
         BhashiniLocalTTS,
@@ -206,13 +207,13 @@ class AppController:
             self.app.show_screen("vitals")
             if new_state == state_manager.INITIALIZING:
                 components = {
-                    "Display": True,
-                    "Speaker": True,
-                    "Microphone": True,
-                    "Temperature Sensor": self.thermal.is_connected,
-                    "Pulse Oximeter": self.oximeter.is_connected,
-                    "ECG Sensor": self.ecg.is_connected,
-                    "Voice Assistant": True,
+                    "Display": False,
+                    "Speaker": False,
+                    "Microphone": False,
+                    "Temperature Sensor": False,
+                    "Pulse Oximeter": False,
+                    "ECG Sensor": False,
+                    "Voice Assistant": False,
                 }
                 self.app.vitals_screen.show_initialization(components)
         elif new_state in [
@@ -245,8 +246,33 @@ class AppController:
             lang = self.state_mgr.get_current_language()
             logger.info(f"Running workflow for language: {lang}")
 
-            # --- 1. System Initialization ---
-            time.sleep(3.0)
+            # --- 1. System Initialization (Progressively tick items with 3s delay) ---
+            checked_components = {
+                "Display": False,
+                "Speaker": False,
+                "Microphone": False,
+                "Temperature Sensor": False,
+                "Pulse Oximeter": False,
+                "ECG Sensor": False,
+                "Voice Assistant": False,
+            }
+            
+            for comp in ["Display", "Speaker", "Microphone", "Temperature Sensor", "Pulse Oximeter", "ECG Sensor", "Voice Assistant"]:
+                time.sleep(3.0)
+                if comp == "Temperature Sensor":
+                    checked_components[comp] = self.thermal.is_connected
+                elif comp == "Pulse Oximeter":
+                    checked_components[comp] = self.oximeter.is_connected
+                elif comp == "ECG Sensor":
+                    checked_components[comp] = self.ecg.is_connected
+                else:
+                    checked_components[comp] = True
+                
+                # Push the tick update to the GUI checklist
+                self.app.after(0, lambda c=checked_components.copy(): self.app.vitals_screen.show_initialization(c))
+            
+            # Final verification pause
+            time.sleep(1.0)
 
             # --- 2. Temperature Step ---
             self.state_mgr.set_state(state_manager.MEASURING_TEMPERATURE)
