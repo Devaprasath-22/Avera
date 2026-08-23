@@ -33,3 +33,9 @@ models/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Workspace Plans & Results
+results/
+implementation_plan*.md
+walkthrough.md
+task.md

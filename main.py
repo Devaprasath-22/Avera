@@ -616,19 +616,6 @@ def detect_input_language(text: str) -> str:
 
 
 def main():
-    if len(sys.argv) > 1 and sys.argv[1] == "benchmark":
-        import argparse
-        parser = argparse.ArgumentParser(description="MedGemma Voice Assistant Benchmark CLI")
-        parser.add_argument("command", choices=["benchmark"], help="Command to run")
-        parser.add_argument("--language", type=str, choices=["en", "hi", "ta", "te"], help="Filter benchmark tests by language")
-        parser.add_argument("--test", type=str, help="Filter benchmark tests by specific Test ID")
-        parser.add_argument("--limit", type=int, help="Limit number of benchmark tests to execute")
-        
-        args = parser.parse_args()
-        
-        from benchmark.evaluator import run_benchmark
-        run_benchmark(language=args.language, test_id=args.test, limit=args.limit)
-        return
 
     print("=" * 65)
     print("   MedGemma Voice Assistant (Bhashini Local ASR/TTS)")
