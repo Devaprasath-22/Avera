@@ -1,4 +1,4 @@
-# MedGemma Medical Kiosk System 🩺
+# AVERA Medical Kiosk System 🩺
 
 An offline, touch-enabled Medical Kiosk application designed for the **NVIDIA Jetson Orin Nano (8GB)**. It features a custom **Retro CRT Terminal / TFT LCD interface**, integrating **local Bhashini ASR/TTS Speech (10 Indian languages)**, **physical healthcare sensors**, **OpenCV camera feeds**, and a **progressive touchscreen diagnostic flow**.
 
