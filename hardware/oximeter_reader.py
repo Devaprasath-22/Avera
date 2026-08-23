@@ -1,6 +1,6 @@
 """
 Oximeter Sensor Reader (SpO2 & Heart Rate) for MedGemma Medical Kiosk.
-Reads MAX30102 PPG sensor via I2C.
+Reads MAX30100/MAX30102 Pulse oximeter & heart rate sensor via I2C.
 Hybrid Mode: Uses live hardware if connected, otherwise falls back to simulation mode.
 """
 
@@ -35,7 +35,7 @@ class OximeterReader:
                 self.bus.write_byte_data(MAX30102_ADDR, REG_LED1_PA, 0x24)
                 self.bus.write_byte_data(MAX30102_ADDR, REG_LED2_PA, 0x24)
                 self.is_connected = True
-                print(f"[Oximeter] Live MAX30102 connected on I2C bus {i2c_bus}")
+                print(f"[Oximeter] Live MAX30100/MAX30102 Pulse oximeter & heart rate sensor connected on I2C bus {i2c_bus}")
             except Exception as exc:
                 print(f"[Oximeter Warning] Physical sensor not found ({exc}). Running in Simulation Mode.")
                 self.is_connected = False

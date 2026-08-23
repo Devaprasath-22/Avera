@@ -1,6 +1,6 @@
 """
-Real-time ECG Signal DSP & Reader for MedGemma Medical Kiosk.
-Reads AD8232 analog output via ADS1115 16-bit I2C ADC converter.
+AD8232 Single Lead ECG Sensor Module Analog Devices DSP & Reader for MedGemma Medical Kiosk.
+Reads AD8232 Single Lead ECG Sensor Module Analog Devices analog output via ADS1115 16-bit I2C ADC converter.
 Hybrid Mode: Uses live hardware if connected, otherwise falls back to simulation mode.
 """
 
@@ -34,7 +34,7 @@ class ECGReader:
             self.bus.write_block_data(ADS1115_ADDR, REG_CONFIG, config)
             time.sleep(0.05)
             self.is_connected = True
-            print(f"[ECG] Live AD8232 / ADS1115 ADC connected on I2C bus {i2c_bus}")
+            print(f"[ECG] Live AD8232 Single Lead ECG Sensor Module Analog Devices / ADS1115 ADC connected on I2C bus {i2c_bus}")
         except Exception as exc:
             print(f"[ECG Warning] Physical ADC not found ({exc}). Running in Simulation Mode.")
             self.is_connected = False

@@ -447,10 +447,20 @@ class BhashiniLocalTTS:
 
         for sentence in sentences[:10]: # Limit to first 10 sentences for rapid speech synthesis
             inputs = tokenizer(sentence, return_tensors="pt").to(device)
-            with torch.no_grad():
-                output = model(**inputs).waveform
-            audio_data = output.squeeze().cpu().numpy()
-            audio_parts.append(audio_data)
+            if "input_ids" in inputs:
+                if inputs["input_ids"].shape[1] == 0:
+                    continue
+                inputs["input_ids"] = inputs["input_ids"].long()
+            if "attention_mask" in inputs:
+                inputs["attention_mask"] = inputs["attention_mask"].long()
+            try:
+                with torch.no_grad():
+                    output = model(**inputs).waveform
+                audio_data = output.squeeze().cpu().numpy()
+                audio_parts.append(audio_data)
+            except RuntimeError as exc:
+                print(f"Skipping sentence synthesis due to model error: {exc}")
+                continue
 
         if audio_parts:
             combined_audio = np.concatenate(audio_parts)
@@ -606,6 +616,20 @@ def detect_input_language(text: str) -> str:
 
 
 def main():
+    if len(sys.argv) > 1 and sys.argv[1] == "benchmark":
+        import argparse
+        parser = argparse.ArgumentParser(description="MedGemma Voice Assistant Benchmark CLI")
+        parser.add_argument("command", choices=["benchmark"], help="Command to run")
+        parser.add_argument("--language", type=str, choices=["en", "hi", "ta", "te"], help="Filter benchmark tests by language")
+        parser.add_argument("--test", type=str, help="Filter benchmark tests by specific Test ID")
+        parser.add_argument("--limit", type=int, help="Limit number of benchmark tests to execute")
+        
+        args = parser.parse_args()
+        
+        from benchmark.evaluator import run_benchmark
+        run_benchmark(language=args.language, test_id=args.test, limit=args.limit)
+        return
+
     print("=" * 65)
     print("   MedGemma Voice Assistant (Bhashini Local ASR/TTS)")
     print("   Optimized for Jetson Orin Nano (8GB) & Offline Systems")

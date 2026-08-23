@@ -53,10 +53,10 @@ Ensure your sensors are wired to the 40-pin GPIO header:
 | Sensor Module | Pins / Interface | Jetson 40-Pin Header Pins |
 | :--- | :--- | :--- |
 | **I2C Bus 1 (ALL Sensors)** | `SDA` / `SCL` | Physical Pins 3 (SDA), 5 (SCL) |
-| **MAX30102 Oximeter** | I2C Addr `0x57` | VCC (3.3V), GND, SDA, SCL |
-| **MLX90614 Thermometer**| I2C Addr `0x5A` | VCC (3.3V), GND, SDA, SCL |
+| **MAX30100 Pulse oximeter & heart rate sensor** | I2C Addr `0x57` | VCC (3.3V), GND, SDA, SCL |
+| **MLX90614 Non contact IR Themometer sensor**| I2C Addr `0x5A` | VCC (3.3V), GND, SDA, SCL |
 | **ADS1115 ADC (for ECG)**| I2C Addr `0x48` | VCC (3.3V), GND, SDA, SCL |
-| **AD8232 ECG Lead** | Analog Input | Output wired to ADS1115 Channel `A0` |
+| **AD8232 Single Lead ECG Sensor Module Analog Devices** | Analog Input | Output wired to ADS1115 Channel `A0` |
 | **ILI9341 SPI Screen** | SPI Bus / GPIO | MOSI (Pin 19), MISO (Pin 21), CLK (Pin 23), CS (Pin 24), DC (Pin 31) |
 
 ---

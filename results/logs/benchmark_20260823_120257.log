@@ -1,0 +1,11 @@
+[2026-08-23 12:02:57] ======================================================================
+[2026-08-23 12:02:57]    MedGemma Offline Voice Assistant Speech Pipeline Benchmark
+[2026-08-23 12:02:57] ======================================================================
+[2026-08-23 12:02:57] Log file created at: D:\Deva\MedGemma\results\logs\benchmark_20260823_120257.log
+[2026-08-23 12:02:57] Found 2 test cases to run.
+[2026-08-23 12:02:57] 
+[Initializing & Pre-loading Models]...
+[2026-08-23 12:02:59] ASR and base TTS models warmed up successfully.
+[2026-08-23 12:02:59] 
+------------------------------------------------------------
+[2026-08-23 12:02:59] Running Test [T005] | Language: [TA] | Category: [pediatric]
