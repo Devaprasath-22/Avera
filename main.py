@@ -172,6 +172,7 @@ def get_medgemma_response(prompt: str, image_path: Optional[str] = None, respons
                 model=MODEL_NAME,
                 prompt=prompt_with_hint,
                 images=[image_path],
+                keep_alive=-1,
             )
             return response.get("response", "").strip(), _extract_context_usage(response)
         except Exception as exc:
@@ -189,6 +190,7 @@ def get_medgemma_response(prompt: str, image_path: Optional[str] = None, respons
     response = ollama.chat(
         model=MODEL_NAME,
         messages=messages,
+        keep_alive=-1,
     )
     return response["message"]["content"], _extract_context_usage(response)
 

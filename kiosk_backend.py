@@ -76,6 +76,26 @@ def sensor_loop():
 # Start sensor loop thread
 threading.Thread(target=sensor_loop, daemon=True).start()
 
+def prewarm_ollama():
+    """
+    Pre-warm the model into GPU/RAM during boot sequence so the initial
+    cold-load delay does not impact the first patient checkup.
+    """
+    try:
+        print("[Ollama] Pre-warming medgemma:4b model into memory (keep_alive=-1)...")
+        ollama.chat(
+            model=MODEL_NAME,
+            messages=[{"role": "user", "content": "ping"}],
+            keep_alive=-1,
+            options={"num_predict": 1}
+        )
+        print("[Ollama] Model medgemma:4b is pre-warmed and resident in memory.")
+    except Exception as exc:
+        print(f"[Ollama Pre-warm Warning] {exc}")
+
+# Pre-warm Ollama model in background daemon thread
+threading.Thread(target=prewarm_ollama, daemon=True).start()
+
 
 @app.get("/api/status")
 def get_status():
@@ -150,6 +170,7 @@ async def interact(
                 model=MODEL_NAME,
                 prompt=prompt_with_hint,
                 images=[image_path],
+                keep_alive=-1,
                 options={"num_ctx": 2048, "num_predict": 180, "temperature": 0.3}
             )
             reply = response.get("response", "").strip()
@@ -165,6 +186,7 @@ async def interact(
             response = ollama.chat(
                 model=MODEL_NAME,
                 messages=messages,
+                keep_alive=-1,
                 options={"num_ctx": 2048, "num_predict": 180, "temperature": 0.3}
             )
             reply = response["message"]["content"].strip()

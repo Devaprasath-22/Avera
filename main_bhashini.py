@@ -67,6 +67,7 @@ def get_medgemma_response(prompt: str, image_path: Optional[str] = None, respons
                 model=MODEL_NAME,
                 prompt=prompt_with_hint,
                 images=[image_path],
+                keep_alive=-1,
                 options={
                     "num_ctx": 2048,
                     "num_predict": 180,
@@ -89,6 +90,7 @@ def get_medgemma_response(prompt: str, image_path: Optional[str] = None, respons
     response = ollama.chat(
         model=MODEL_NAME,
         messages=messages,
+        keep_alive=-1,
         options={
             "num_ctx": 2048,
             "num_predict": 180,

@@ -78,6 +78,25 @@ class AppController:
         self.document_capture_event = threading.Event()
         self.document_skip_event = threading.Event()
 
+        # Pre-warm Ollama model in background daemon thread
+        threading.Thread(target=self._prewarm_ollama, daemon=True).start()
+
+    def _prewarm_ollama(self):
+        """
+        Pre-warm the Ollama model into GPU/RAM at kiosk boot to avoid cold-start delays.
+        """
+        try:
+            logger.info(f"Pre-warming {MODEL_NAME} into memory (keep_alive=-1)...")
+            ollama.chat(
+                model=MODEL_NAME,
+                messages=[{"role": "user", "content": "ping"}],
+                keep_alive=-1,
+                options={"num_predict": 1},
+            )
+            logger.info(f"Model {MODEL_NAME} successfully pre-warmed in memory.")
+        except Exception as exc:
+            logger.warning(f"Ollama pre-warm skipped or failed: {exc}")
+
     def set_app(self, app):
         self.app = app
 
@@ -573,6 +592,7 @@ class AppController:
                     model=MODEL_NAME,
                     prompt=prompt_with_hint,
                     images=[image_path],
+                    keep_alive=-1,
                     options={
                         "num_ctx": 2048,
                         "num_predict": 180,
@@ -591,6 +611,7 @@ class AppController:
                 response = ollama.chat(
                     model=MODEL_NAME,
                     messages=messages,
+                    keep_alive=-1,
                     options={
                         "num_ctx": 2048,
                         "num_predict": 180,
