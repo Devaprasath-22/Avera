@@ -44,8 +44,9 @@ class OximeterReadError(Exception):
 
 
 class OximeterReader:
-    def __init__(self, i2c_bus: int = 1, sample_rate: int = 100,
-                 buffer_seconds: float = 5.0, max_retries: int = 3):
+    def __init__(self, use_hardware: bool = True, i2c_bus: int = 1, sample_rate: int = 100,
+                 buffer_seconds: float = 5.0, max_retries: int = 3, **kwargs):
+        self.use_hardware = use_hardware
         self.i2c_bus = i2c_bus
         self.sample_rate = sample_rate
         self.max_retries = max_retries
@@ -56,7 +57,11 @@ class OximeterReader:
         self.red_buffer = deque(maxlen=buffer_len)
         self.ir_buffer = deque(maxlen=buffer_len)
 
-        self._connect()
+        if self.use_hardware:
+            try:
+                self._connect()
+            except Exception as exc:
+                print(f"[Oximeter Notice] Hardware connection skipped/unavailable: {exc}")
 
     def _connect(self):
         try:

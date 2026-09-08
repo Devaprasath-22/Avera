@@ -324,6 +324,10 @@ class BhashiniLocalTTS:
     _loaded_tokenizers = {}
 
     @classmethod
+    def get_model(cls, language: str = "en"):
+        return cls.get_tts_engine(language)
+
+    @classmethod
     def get_tts_engine(cls, language: str = "en"):
         lang_key = language.lower() if language.lower() in TTS_MODEL_MAPPING else "en"
         if lang_key in cls._loaded_models:

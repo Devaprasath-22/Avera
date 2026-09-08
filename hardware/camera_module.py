@@ -48,7 +48,10 @@ class CameraModule:
         self.cap = None
         self.is_opened = False
 
-        self._init_camera()
+        try:
+            self._init_camera()
+        except Exception as exc:
+            print(f"[Camera Notice] Camera initialization skipped/unavailable: {exc}")
 
     def _csi_pipeline(self) -> str:
         return (

@@ -26,8 +26,9 @@ class ECGReadError(Exception):
 
 
 class ECGReader:
-    def __init__(self, buffer_size: int = 500, sample_rate: int = 100,
-                 i2c_bus: int = 1, max_retries: int = 3):
+    def __init__(self, use_hardware: bool = True, buffer_size: int = 500, sample_rate: int = 100,
+                 i2c_bus: int = 1, max_retries: int = 3, **kwargs):
+        self.use_hardware = use_hardware
         self.buffer_size = buffer_size
         self.sample_rate = sample_rate
         self.buffer = np.zeros(self.buffer_size, dtype=np.float32)
@@ -36,7 +37,11 @@ class ECGReader:
         self.bus = None
         self.is_connected = False
 
-        self._connect()
+        if self.use_hardware:
+            try:
+                self._connect()
+            except Exception as exc:
+                print(f"[ECG Notice] Hardware connection skipped/unavailable: {exc}")
 
         # Butterworth bandpass filter (0.5 Hz - 40 Hz), standard for ECG
         nyquist = 0.5 * self.sample_rate

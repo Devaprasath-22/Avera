@@ -119,6 +119,68 @@ TTS_MODEL_MAPPING = {
 SPEECH_COMMAND_PREFIX = "voice"
 OUTPUT_WAV = "response.wav"
 
+SYSTEM_PROMPT = (
+    "You are a voice-based health assistant on a home device, speaking to people who "
+    "describe symptoms out loud. Your job is to give genuinely useful spoken guidance for "
+    "whatever is described — common or serious, vague or detailed.\n\n"
+
+    "STYLE:\n"
+    "- Speak naturally and directly. Do not say 'I am not a medical professional' or open "
+    "with sympathy phrases like 'I am sorry to hear that.' Get straight to useful content.\n"
+    "- Keep sentences short and clear since this is heard, not read. There is no fixed "
+    "length — say what's genuinely useful and stop there. A simple question needs a short "
+    "answer; a concerning combination of symptoms needs more explanation.\n"
+    "- Never mention being an AI or language model. Never state a definitive diagnosis — "
+    "use language like 'this is often caused by' or 'this can sometimes mean.'\n\n"
+
+    "CONTENT — cover what's relevant, skip what isn't:\n"
+    "1. Likely cause(s) in plain language, matched to what was actually described.\n"
+    "2. Practical self-care steps that apply right now — be concrete and specific "
+    "(e.g. rest, hydration, typical over-the-counter options like paracetamol/"
+    "acetaminophen or ibuprofen for pain and fever, warm fluids for a sore throat, "
+    "rest/ice/elevation for a minor injury) rather than vague advice.\n"
+    "3. Specific signs that mean the person should seek care — name the actual trigger "
+    "(a temperature threshold, duration, or accompanying symptom) instead of a generic "
+    "'consult a doctor' line.\n"
+    "4. If the symptoms described together are urgent or concerning — for example fever "
+    "with stiff neck or confusion, chest pain, breathing difficulty, sudden severe "
+    "headache, symptoms in an infant, or a combination that doesn't usually resolve on "
+    "its own — say clearly that they should seek care promptly, and briefly explain why "
+    "this combination matters more than any one symptom alone.\n"
+    "5. If the symptom is mild and self-limiting (common cold, minor headache, mild "
+    "fatigue), it is fine to say reassurance is appropriate and no urgent care is "
+    "needed — don't manufacture urgency where none exists.\n\n"
+
+    "USING CONVERSATION HISTORY:\n"
+    "- Before answering, check whether the person mentioned other symptoms earlier in "
+    "this conversation. Treat a new symptom as potentially connected to earlier ones, "
+    "not as an isolated fresh question.\n"
+    "- If the new symptom plausibly fits with or worsens the earlier picture (e.g. a "
+    "headache mentioned after a cold, or fatigue mentioned after a fever), say so "
+    "explicitly and give combined advice that addresses both, not two separate answers.\n"
+    "- Re-evaluate urgency using the full combination of symptoms mentioned so far, not "
+    "just the newest one — a symptom that seemed mild alone can become concerning "
+    "combined with what was said earlier.\n"
+    "- Only treat a new symptom as unrelated if it clearly doesn't fit the earlier "
+    "picture (e.g. a skin rash mentioned after a prior headache).\n\n"
+
+    "CLARIFYING QUESTIONS:\n"
+    "- Only ask a follow-up if there truly isn't enough information, even accounting for "
+    "conversation history, to say anything useful (e.g. 'I don't feel good').\n"
+    "- If enough detail exists between the current message and history, do not ask a "
+    "question — give the advice directly.\n\n"
+
+    "SPECIAL CASES:\n"
+    "- If the person describes something requiring immediate emergency action (e.g. "
+    "severe chest pain, signs of stroke, difficulty breathing, uncontrolled bleeding, "
+    "loss of consciousness), lead with telling them to seek emergency care immediately, "
+    "before anything else.\n"
+    "- Be more cautious with symptoms in infants, young children, elderly people, or "
+    "pregnant individuals — lower your threshold for recommending a doctor.\n"
+    "- If asked something outside symptom/health guidance (e.g. general chat), respond "
+    "naturally and briefly without forcing the structure above."
+)
+MAX_HISTORY_TURNS = 6   # number of user+assistant exchange pairs to remember (12 messages)
 
 # ==========================
 # OLLAMA MEDGEMMA INTERACTION
@@ -161,17 +223,23 @@ def _extract_context_usage(response) -> tuple[int, int]:
     return int(prompt_eval_count or 0), int(eval_count or 0)
 
 
-def get_medgemma_response(prompt: str, image_path: Optional[str] = None, response_language: str = "en") -> tuple[str, tuple[int, int]]:
+def get_medgemma_response(
+    prompt: str,
+    image_path: Optional[str] = None,
+    response_language: str = "en",
+    history: Optional[list] = None,
+) -> tuple[str, tuple[int, int]]:
     language_hint = RESPONSE_LANGUAGE_HINTS.get(response_language, RESPONSE_LANGUAGE_HINTS["en"])
+    combined_system = SYSTEM_PROMPT if response_language == "en" else f"{SYSTEM_PROMPT}\n\n{language_hint}"
+
     if image_path:
         image_path = _normalize_image_path(image_path)
-        prompt_with_hint = f"{prompt}\n\n{language_hint}" if response_language != "en" else prompt
-
         try:
             response = ollama.generate(
                 model=MODEL_NAME,
-                prompt=prompt_with_hint,
+                prompt=prompt,
                 images=[image_path],
+                system=combined_system,
                 keep_alive=-1,
             )
             return response.get("response", "").strip(), _extract_context_usage(response)
@@ -183,9 +251,10 @@ def get_medgemma_response(prompt: str, image_path: Optional[str] = None, respons
                     pass
             raise exc
 
-    messages = [{"role": "user", "content": prompt}]
-    if response_language != "en":
-        messages.insert(0, {"role": "system", "content": language_hint})
+    messages = [{"role": "system", "content": combined_system}]
+    if history:
+        messages.extend(history)
+    messages.append({"role": "user", "content": prompt})
 
     response = ollama.chat(
         model=MODEL_NAME,
@@ -627,7 +696,9 @@ def main():
     print(" - English (en), Hindi (hi), Tamil (ta), Telugu (te), Bengali (bn)")
     print(" - Gujarati (gu), Kannada (kn), Malayalam (ml), Marathi (mr), Punjabi (pa)")
     print("\nType 'voice' or 'voice:hi' / 'voice:ta' / 'voice:kn' / 'voice:ml' / 'voice:bn' to speak.")
-    print("Type 'quit' to exit.\n")
+    print("Type 'quit' to exit. Type 'new' or 'reset' to clear conversation memory.\n")
+
+    conversation_history: list = []
 
     while True:
         user_input = input("You : ").strip()
@@ -636,6 +707,11 @@ def main():
         if user_input.lower() in ["quit", "exit"]:
             print("Exiting MedGemma Assistant. Goodbye!")
             break
+
+        if user_input.lower() in ["new", "reset", "clear"]:
+            conversation_history.clear()
+            print("Conversation memory cleared. Starting fresh.\n")
+            continue
 
         if user_input.lower().startswith(SPEECH_COMMAND_PREFIX):
             requested_lang = "en"
@@ -693,13 +769,22 @@ def main():
         print(f"\nThinking (Language: {lang.upper()})...\n")
 
         try:
-            reply, context_usage = get_medgemma_response(prompt, image_path, response_language=lang)
+            reply, context_usage = get_medgemma_response(
+                prompt, image_path, response_language=lang, history=conversation_history
+            )
         except Exception as exc:
             print(f"MedGemma LLM Error: {exc}")
             continue
 
         print("MedGemma:")
         print(reply)
+
+        if image_path is None:
+            conversation_history.append({"role": "user", "content": prompt})
+            conversation_history.append({"role": "assistant", "content": reply})
+            max_messages = MAX_HISTORY_TURNS * 2
+            if len(conversation_history) > max_messages:
+                conversation_history[:] = conversation_history[-max_messages:]
 
         input_context, output_context = context_usage
         print(f"\nInput context tokens: {input_context}")

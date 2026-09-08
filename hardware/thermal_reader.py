@@ -37,14 +37,19 @@ class ThermalReader:
     # Confirm the correct one for your board with: sudo i2cdetect -y -r <bus>
     CANDIDATE_BUSES = [7, 8, 9, 1, 0]
 
-    def __init__(self, i2c_address: int = 0x5A, i2c_bus: int = None, max_retries: int = 3):
+    def __init__(self, use_hardware: bool = True, i2c_address: int = 0x5A, i2c_bus: int = None, max_retries: int = 3, **kwargs):
+        self.use_hardware = use_hardware
         self.i2c_address = i2c_address
         self.i2c_bus = i2c_bus
         self.max_retries = max_retries
         self.bus = None
         self.is_connected = False
 
-        self._connect()  # raises SensorNotFoundError if nothing is found
+        if self.use_hardware:
+            try:
+                self._connect()
+            except Exception as exc:
+                print(f"[Thermal Notice] Hardware connection skipped/unavailable: {exc}")
 
     def _connect(self):
         try:
