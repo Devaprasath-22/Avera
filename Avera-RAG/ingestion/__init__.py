@@ -1,1 +1,0 @@
-"""Avera RAG — ingestion package."""
